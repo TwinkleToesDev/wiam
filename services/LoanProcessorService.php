@@ -9,7 +9,7 @@ use yii\db\Exception;
 
 class LoanProcessorService
 {
-    private $delay;
+    private int $delay;
 
     public function __construct(int $delay)
     {
