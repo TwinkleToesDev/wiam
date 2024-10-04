@@ -34,6 +34,5 @@ class RequestController extends Controller
 
         $loanRequestService = new LoanRequestService();
         return $loanRequestService->create($loanRequest);
-
     }
 }

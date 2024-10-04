@@ -72,7 +72,10 @@ class LoanProcessorService
                     $this->processRequest($loanRequest);
                 } catch (\Exception $e) {
                     $success = false;
-                    Yii::error("Error in processing the loan ID {$loanRequest->id}: " . $e->getMessage(), __METHOD__);
+                    Yii::error(
+                        "Error in processing the loan ID {$loanRequest->id}: " . $e->getMessage(),
+                        __METHOD__
+                    );
                 }
             }
 
