@@ -23,7 +23,7 @@ class m241003_100756_create_loans_table extends Migration
      */
     public function safeUp()
     {
-        $this->createTable('loan_request', [
+        $this->createTable('{{%loan_request}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
             'amount' => $this->integer()->notNull(),
@@ -33,6 +33,8 @@ class m241003_100756_create_loans_table extends Migration
         ]);
 
         $this->createIndex('idx-loan_request-user_id', '{{%loan_request}}', 'user_id');
+        $this->createIndex('idx-loan_request-amount', '{{%loan_request}}', 'amount');
+        $this->createIndex('idx-loan_request-status', '{{%loan_request}}', 'status');
     }
 
     /**
@@ -40,6 +42,6 @@ class m241003_100756_create_loans_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%loans}}');
+        $this->dropTable('{{%loan_request}}');
     }
 }

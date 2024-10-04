@@ -32,18 +32,8 @@ class RequestController extends Controller
             ->where(['user_id' => $loanRequest->user_id, 'status' => 'approved'])
             ->exists();
 
-        if ($loanRequest->validate() && $loanRequest->save()) {
-            Yii::$app->response->statusCode = 201;
-            return [
-                'result' => true,
-                'id' => $loanRequest->id,
-            ];
-        } else {
-            Yii::$app->response->statusCode = 400;
-            return [
-                'result' => false,
-                'errors' => $loanRequest->errors
-            ];
-        }
+        $loanRequestService = new LoanRequestService();
+        return $loanRequestService->create($loanRequest);
+
     }
 }

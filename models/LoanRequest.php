@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\enums\StatusEnum;
 use yii\db\ActiveRecord;
 
 class LoanRequest extends ActiveRecord
@@ -27,7 +28,7 @@ class LoanRequest extends ActiveRecord
         return [
             [['user_id', 'amount', 'term'], 'required'],
             [['user_id', 'amount', 'term'], 'integer'],
-            [['status'], 'string'],
+            [['status'], 'in', 'range' => array_column(StatusEnum::cases(), 'value')],
             [['created_at'], 'safe'],
         ];
     }

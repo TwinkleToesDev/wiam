@@ -2,6 +2,7 @@
 
 namespace app\services;
 
+use app\enums\StatusEnum;
 use Yii;
 use app\models\LoanRequest;
 use yii\db\Exception;
@@ -17,26 +18,31 @@ class LoanProcessorService
 
     public function process(): bool
     {
-        $db = Yii::$app->db;
+        $limit = 100;
         $success = true;
-        $limit = 5;
+        $db = Yii::$app->db;
+        $pendingStatus = StatusEnum::PENDING->value;
+        $processingStatus = StatusEnum::PROCESSING->value;
 
         do {
+
             $transaction = $db->beginTransaction();
+
             try {
+
                 $sql = "
-            WITH cte AS (
-                SELECT id FROM loan_request
-                WHERE status = 'pending'
-                LIMIT :limit
-                FOR UPDATE SKIP LOCKED
-            )
-            UPDATE loan_request
-            SET status = 'processing'
-            FROM cte
-            WHERE loan_request.id = cte.id
-            RETURNING loan_request.*;
-            ";
+                    WITH cte AS (
+                        SELECT id FROM loan_request
+                        WHERE status = '$pendingStatus'
+                        LIMIT :limit
+                        FOR UPDATE SKIP LOCKED
+                    )
+                    UPDATE loan_request
+                    SET status = '$processingStatus'
+                    FROM cte
+                    WHERE loan_request.id = cte.id
+                    RETURNING loan_request.*;
+                ";
 
                 $pendingRequestsData = $db->createCommand($sql)
                     ->bindValue(':limit', $limit)
@@ -82,14 +88,12 @@ class LoanProcessorService
     {
         sleep($this->delay);
         $hasApprovedRequest = LoanRequest::find()
-            ->where(['user_id' => $loanRequest->user_id, 'status' => 'approved'])
+            ->where(['user_id' => $loanRequest->user_id, 'status' => StatusEnum::APPROVED->value])
             ->exists();
 
-        if ($hasApprovedRequest) {
-            $loanRequest->status = 'declined';
-        } else {
-            $loanRequest->status = (mt_rand(1, 100) <= 10) ? 'approved' : 'declined';
-        }
+        $loanRequest->status = $hasApprovedRequest
+            ? StatusEnum::DECLINED->value
+            : (mt_rand(1, 100) <= 10 ? StatusEnum::APPROVED->value : StatusEnum::DECLINED->value);
 
         $loanRequest->updateAttributes(['status' => $loanRequest->status]);
     }
