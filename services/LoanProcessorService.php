@@ -13,7 +13,7 @@ class LoanProcessorService
 
     public function __construct(int $delay)
     {
-        $this->delay = $delay;
+        $this->delay = $delay || 5;
     }
 
     public function process(): bool

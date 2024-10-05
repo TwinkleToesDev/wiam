@@ -18,7 +18,7 @@ class LoanProcessorServiceController extends Controller
     /**
      * @throws \Exception
      */
-    public function actionProcess(int $delay = 10): array
+    public function actionProcess(int $delay): array
     {
         $processor = new LoanProcessorService($delay);
         $result = $processor->process();
