@@ -2,11 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\LoanRequest;
+use app\services\LoanRequestService;
 use Yii;
 use yii\db\Exception;
-use yii\helpers\VarDumper;
 use yii\rest\Controller;
-use app\models\LoanRequest;
 use yii\web\Response;
 
 class RequestController extends Controller
