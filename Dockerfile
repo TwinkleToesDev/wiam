@@ -14,8 +14,6 @@ RUN composer install
 
 RUN chown -R www-data:www-data /var/www/html
 
-RUN php yii migrate
-
 EXPOSE 9000
 
 CMD ["php-fpm"]

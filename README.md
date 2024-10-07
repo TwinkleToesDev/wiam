@@ -4,12 +4,19 @@
 
 Build the container:
 ```
-docker-compose build --no-cache php
+docker-compose build
 ```
 
 Start the container:
 ```
 docker-compose up -d
+```
+
+Start migrations:
+```
+ docker-compose exec php bash   
+ 
+ php yii migrate
 ```
 
 The project runs on `localhost`.
